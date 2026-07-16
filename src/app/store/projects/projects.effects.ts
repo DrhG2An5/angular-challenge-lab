@@ -1,16 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { map, catchError, exhaustMap } from 'rxjs/operators';
+
 import { ApiService } from '../../core/services/api.service';
 import { ProjectActions } from './projects.actions';
 
 @Injectable()
 export class ProjectsEffects {
-  constructor(
-    private actions$: Actions,
-    private apiService: ApiService
-  ) {}
+  private actions$ = inject(Actions);
+  private apiService = inject(ApiService);
 
   loadProjects$ = createEffect(() =>
     this.actions$.pipe(
@@ -39,6 +38,5 @@ export class ProjectsEffects {
         )
       )
     ),
-    { dispatch: false } // 🐛 BUG: Actions are mapped but never dispatched!
   );
 }
