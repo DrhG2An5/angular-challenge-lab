@@ -18,7 +18,7 @@ export const routes: Routes = [
   {
     path: '',
     component: ShellComponent,
-    canActivate: [authGuard],  // 🐛 CHALLENGE 19: Guard logic is inverted
+    canActivate: [authGuard],  // 🐛 CHALLENGE 19: Guard doesn't actually protect anything
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {

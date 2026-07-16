@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { map, catchError, exhaustMap } from 'rxjs/operators';
@@ -7,10 +7,11 @@ import { ProjectActions } from './projects.actions';
 
 @Injectable()
 export class ProjectsEffects {
-  constructor(
-    private actions$: Actions,
-    private apiService: ApiService
-  ) {}
+  // NOTE: effects are class-field initializers, which run BEFORE the
+  // constructor — so dependencies must be inject()-ed fields declared
+  // above them, not constructor parameters.
+  private actions$ = inject(Actions);
+  private apiService = inject(ApiService);
 
   loadProjects$ = createEffect(() =>
     this.actions$.pipe(

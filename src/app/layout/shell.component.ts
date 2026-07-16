@@ -7,11 +7,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
+import { Router } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
 import { ThemeService } from '../core/services/theme.service';
 import { Subscription, interval } from 'rxjs';
 
-// 🐛 CHALLENGE 10 (RxJS - Memory Leak):
+// 🐛 CHALLENGE 11 (RxJS - Memory Leak):
 // This component subscribes to an interval observable in ngOnInit
 // but never unsubscribes in ngOnDestroy. This causes a memory leak.
 // The subscription keeps running even after the component is destroyed.
@@ -74,21 +75,28 @@ import { Subscription, interval } from 'rxjs';
               <mat-icon>{{ themeService.darkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
             </button>
 
-            <button mat-icon-button [matMenuTriggerFor]="userMenu">
-              <mat-icon>account_circle</mat-icon>
-            </button>
-            <mat-menu #userMenu="matMenu">
-              @if (authService.currentUser(); as user) {
+            @if (authService.currentUser(); as user) {
+              <button mat-icon-button [matMenuTriggerFor]="userMenu">
+                <mat-icon>account_circle</mat-icon>
+              </button>
+              <mat-menu #userMenu="matMenu">
                 <div class="px-4 py-2 border-b">
                   <p class="font-medium m-0">{{ user.name }}</p>
                   <p class="text-sm text-gray-500 m-0">{{ user.email }}</p>
                   <p class="text-xs text-gray-400 m-0">Role: {{ user.role }}</p>
                 </div>
-              }
-              <button mat-menu-item (click)="authService.logout()">
-                <mat-icon>logout</mat-icon> Logout
+                <button mat-menu-item routerLink="/login">
+                  <mat-icon>swap_horiz</mat-icon> Switch user
+                </button>
+                <button mat-menu-item (click)="logout()">
+                  <mat-icon>logout</mat-icon> Logout
+                </button>
+              </mat-menu>
+            } @else {
+              <button mat-stroked-button routerLink="/login">
+                <mat-icon>login</mat-icon> Sign in
               </button>
-            </mat-menu>
+            }
           </div>
         </mat-toolbar>
 
@@ -106,11 +114,12 @@ import { Subscription, interval } from 'rxjs';
 export class ShellComponent implements OnInit, OnDestroy {
   authService = inject(AuthService);
   themeService = inject(ThemeService);
+  private router = inject(Router);
 
   sidenavOpen = signal(true);
   tickCount = 0;
 
-  // 🐛 CHALLENGE 10: This subscription is never cleaned up!
+  // 🐛 CHALLENGE 11: This subscription is never cleaned up!
   private tickSub!: Subscription;
 
   ngOnInit(): void {
@@ -128,5 +137,10 @@ export class ShellComponent implements OnInit, OnDestroy {
 
   toggleSidenav(): void {
     this.sidenavOpen.update(v => !v);
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

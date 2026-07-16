@@ -27,17 +27,14 @@ export class AuthService {
 
   isLoggedIn = computed(() => this.currentUser() !== null);
 
-  constructor(private mockData: MockDataService) {
-    // Auto-login with first user for demo
-    const defaultUser = this.mockData.getUsers()[0];
-    this.currentUser.set(defaultUser);
-    // BUG: forgot to also update BehaviorSubject — they are out of sync
-  }
+  constructor(private mockData: MockDataService) {}
 
   login(userId: string): void {
     const user = this.mockData.getUserById(userId) ?? null;
     this.currentUser.set(user);
-    this.currentUser$.next(user);
+    // 🐛 CHALLENGE 5 BUG: forgot to also update the BehaviorSubject —
+    // currentUser$ still holds the old value, so anything reading it
+    // (like the isAdmin computed above) is out of sync with the signal.
   }
 
   logout(): void {

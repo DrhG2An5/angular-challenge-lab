@@ -221,11 +221,11 @@ export class ChallengesComponent {
 
     // Tier 7: Routing
     {
-      number: 19, title: 'Fix inverted auth guard logic',
+      number: 19, title: 'Fix auth guard that protects nothing',
       category: 'Routing', difficulty: 'easy',
       file: 'core/guards/auth.guard.ts',
-      description: 'The auth guard returns false when the user IS logged in (blocking them) and true when they\'re NOT logged in (allowing access). The logic is backwards.',
-      hint: 'Invert: `if (!authService.isLoggedIn()) { return router.createUrlTree(["/login"]); } return true;`',
+      description: 'The auth guard always returns true without checking authService.isLoggedIn() — open the app in a fresh session and you reach the dashboard without ever logging in. Logged-out users should be redirected to /login instead.',
+      hint: 'Check the signal and redirect: `if (!authService.isLoggedIn()) { return router.createUrlTree(["/login"]); } return true;` — a UrlTree redirects; returning plain false would just leave a blank page.',
     },
     {
       number: 20, title: 'Fix admin guard signal call',

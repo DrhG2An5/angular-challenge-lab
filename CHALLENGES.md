@@ -8,7 +8,7 @@ A project management app with **22 intentional bugs** organized across 7 tiers o
 npm start        # Start the dev server
 ```
 
-Navigate to **http://localhost:4200** — you'll land on the dashboard. Use the sidebar "Challenges" link to see the full challenge list with hints.
+Navigate to **http://localhost:4200** — you'll land on the dashboard *without logging in* (that itself is Challenge 19's bug). Use **Sign in** in the toolbar to log in as one of the mock users — roles matter for the Settings/admin-guard challenge (20). Use the sidebar "Challenges" link to see the full challenge list with hints.
 
 Every bug is marked with `🐛 CHALLENGE N` in the source code. Each challenge teaches a specific Angular concept.
 
@@ -135,10 +135,10 @@ Every bug is marked with `🐛 CHALLENGE N` in the source code. Each challenge t
 
 ## Tier 7: Routing (Easy-Medium)
 
-### Challenge 19 — Inverted auth guard logic
+### Challenge 19 — Auth guard that protects nothing
 **File:** `core/guards/auth.guard.ts`
-**Problem:** Guard blocks logged-in users and allows anonymous access (logic backwards)
-**Learn:** Functional guards (`CanActivateFn`), `router.createUrlTree()` for redirect
+**Problem:** Guard always returns `true` — open the app in a fresh session and you land on the dashboard without ever logging in
+**Learn:** Functional guards (`CanActivateFn`), `router.createUrlTree(['/login'])` for redirect (returning `false` alone just leaves a blank page)
 
 ### Challenge 20 — Signal not called in admin guard
 **File:** `core/guards/admin.guard.ts`

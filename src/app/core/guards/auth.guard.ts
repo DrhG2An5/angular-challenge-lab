@@ -4,19 +4,21 @@ import { AuthService } from '../services/auth.service';
 
 // 🐛 CHALLENGE 19 (Routing - Functional Guard):
 // This guard should prevent access to protected routes when the user
-// is not logged in. But it has two bugs:
-// 1. It returns the OPPOSITE of what it should (allows when not logged in)
-// 2. It doesn't redirect to login — just returns false, leaving a blank page
-// FIX: Invert the logic and use router.createUrlTree() for redirect.
+// is not logged in — but it doesn't protect anything:
+// 1. It never checks authService.isLoggedIn(), so anonymous users get in
+//    (open the app in a fresh session: you land on the dashboard without
+//    ever logging in — that's this bug in action)
+// 2. When the user is NOT logged in it should redirect to /login using
+//    router.createUrlTree(['/login']) instead of just returning false
+//    (returning false alone leaves the user on a blank page)
+// FIX: Allow access only when isLoggedIn() is true; otherwise return
+// a UrlTree pointing at /login.
 
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  // 🐛 BUG: Logic is inverted — this blocks logged-in users!
-  if (authService.isLoggedIn()) {
-    return false;
-  }
-
-  return true; // 🐛 BUG: Allows unauthenticated access
+  // 🐛 BUG: No auth check at all — everyone is allowed through,
+  // logged in or not. Protected routes are wide open.
+  return true;
 };
