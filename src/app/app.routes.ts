@@ -3,7 +3,6 @@ import { ShellComponent } from './layout/shell.component';
 import { authGuard } from './core/guards/auth.guard';
 import { adminGuard } from './core/guards/admin.guard';
 import { projectResolver } from './core/guards/project.resolver';
-import { Component } from '@angular/core';
 
 // 🐛 CHALLENGE 22 (Routing - Lazy Loading):
 // The settings route uses loadComponent, but SettingsComponent is NOT
@@ -11,18 +10,7 @@ import { Component } from '@angular/core';
 // FIX: Either make SettingsComponent standalone, or use loadChildren
 // with the NgModule/routing module approach.
 
-@Component({
-  standalone: true,
-  template: '<div>Home</div>'
-})
-
-class HomeComponent {}
-
 export const routes: Routes = [
-  {
-    path: '',
-    component: HomeComponent
-  },
   {
     path: 'login',
     loadComponent: () => import('./features/auth/login.component').then(m => m.LoginComponent),

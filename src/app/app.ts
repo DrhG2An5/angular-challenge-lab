@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,8 @@ import { RouterOutlet } from '@angular/router';
   imports: [RouterOutlet],
   template: `<router-outlet />`,
 })
-export class App {}
+export class App {
+  // Instantiated at the root so the theme applies on every route
+  // (not only once the shell has injected it).
+  private themeService = inject(ThemeService);
+}

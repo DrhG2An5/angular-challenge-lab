@@ -9,15 +9,32 @@ html {
     typography: Roboto,
     density: 0,
   ));
-}
 
-body {
-  color-scheme: light;
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
-  margin: 0;
+  // App canvas: a slightly darker-than-white in light mode (less glare
+  // than the default Material surface), near-black in dark mode.
+  --app-canvas: light-dark(#eef0f3, #16161b);
 }
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+body {
+  // Light by default. ThemeService toggles .dark-theme on <body>;
+  // switching color-scheme flips every light-dark() Material token.
+  color-scheme: light;
+  margin: 0;
+  background-color: var(--app-canvas);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+body.dark-theme {
+  color-scheme: dark;
+}
+
+// Material paints its own background over the page — keep the content
+// area and sidenav on the app canvas instead of bright white.
+mat-sidenav-container {
+  --mat-sidenav-content-background-color: var(--app-canvas);
+  --mat-sidenav-container-background-color: var(--mat-sys-surface);
+}
