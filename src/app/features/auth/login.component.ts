@@ -11,7 +11,7 @@ import { MockDataService } from '../../core/services/mock-data.service';
   standalone: true,
   imports: [MatCardModule, MatButtonModule, MatIconModule, RouterLink],
   template: `
-    <div class="flex items-center justify-center h-screen bg-gray-50">
+    <div class="flex items-center justify-center h-screen" style="background: var(--app-canvas)">
       <mat-card class="w-[28rem] p-8">
         <div class="text-center mb-6">
           <mat-icon class="text-indigo-600 text-5xl mb-2">bug_report</mat-icon>

@@ -108,7 +108,8 @@ import { Subscription, interval } from 'rxjs';
   `,
   styles: [`
     .active-link { background-color: rgba(63, 81, 181, 0.08); }
-    mat-sidenav { border-right: 1px solid #e0e0e0; }
+    :host-context(.dark-theme) .active-link { background-color: rgba(159, 168, 218, 0.16); }
+    mat-sidenav { border-right: 1px solid var(--mat-sys-outline-variant); }
   `]
 })
 export class ShellComponent implements OnInit, OnDestroy {
